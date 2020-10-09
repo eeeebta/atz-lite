@@ -32,7 +32,7 @@ def main():
             if request.files.get("attendance_4"):
                 temp_file_arr.append(request.files.get("attendance_4").readlines())
 
-            merged_files_arr = [line.decode() for file in temp_file_arr for line in file]
+            merged_files_arr = [line.decode().lower() for file in temp_file_arr for line in file]
 
             print(merged_files_arr)
         else:
@@ -41,38 +41,80 @@ def main():
             files = request.files.getlist("attendance_m")
 
             # TODO fix error message
-            # if len(files) < 1:
-            #    return "error"
+            if len(files) < 1:
+                return "Files were not attached"
 
-            for file in files:
-                for contents in file.readlines():
-                    # Decode the message cause apparently bytes aren't meant to be read by humans, lol
-                    merged_files_arr.append(contents.decode())
+            # Otherwise continue on looking at the files and then decode the contents of those files
+            merged_files_arr = [contents.decode().lower() for file in files for contents in file.readlines()]
 
-        def generate():
-            for file_content in merged_files_arr:
-                yield "".join(file_content)
+        # Generate function used to return the file, but won't be used here
+        # def generate():
+        #     for file_content in merged_files_arr:
+        #         yield "".join(file_content)
 
             print("off")
 
         # Process roster file
 
+        # Load dictionary
+        student_dict = json.loads(roster[1])
+        student_list = []
+
+        print(student_dict)
+
+        # TODO might do a recode here cause this is sort of messy
         # Check if the roster file is valid
-        if len(roster) < 1 or roster[0] != "--------ROSTER_HEAD--------":
+        processed_file_arr = []
+        if len(roster) < 1 or roster[0] != "--------ROSTER_HEAD--------\n":
             return "roster is not valid"
-        if roster[1] == "NO_IDS":
-            print("")
+        try:
+            student_list = student_dict["NO_ID"]
+            for student in student_list:
+                for message in merged_files_arr:
+                    if student in message:
+                        processed_file_arr.append(student)
+            print(f"MERGED_ARR: {merged_files_arr}")
+            print(f"LIST: {student_list}")
             # Process without IDs cause it's not a json/python dict
-        elif roster[1] == "IDS_USED":
-            print("todo")
-            # Process using IDs because it's a json/python dict
+        except KeyError:
+            try:
+                print(f"MERGED_ARR: {merged_files_arr}")
+                processed_file_arr = []
+                class_codes = []
+                for key, val in student_dict.items():
+                    if key != "NO_ID":
+                        class_codes.append(key)
+                        print(val)
+
+                for key in class_codes:
+                    for message in merged_files_arr:
+                        if key in message:
+                            processed_file_arr.append(message)
+
+                print(merged_files_arr)
+                print(f"CCODES: {class_codes}")
+                print(processed_file_arr)
+            except KeyError:
+                return "Invalid structure of roster"
+
+        students = set(processed_file_arr)
+        print(f"PROCESSED_SET: {set(processed_file_arr)}")
+
+        absent = get_absent(student_list, students)
+        print(f"ABSENT: {absent}")
+        print(f"ABSENT: {absent}")
+        print(f"ABSENT: {absent}")
+        print(f"ABSENT: {absent}")
+        print(f"ABSENT: {absent}")
+        print(f"ABSENT: {absent}")
+
 
         # Return the merged file
         # return Response(generate(), mimetype="text/plain",
         #                headers={"Content-Disposition": "attachment;filename=test.txt"})
 
         # TODO redirect somewhere else
-        return redirect("/")
+        return render_template("index.html", message="E", students=students, absent=absent, using_dict=False)
     else:
         return render_template("index.html")
 
@@ -111,6 +153,7 @@ def create_roster():
             students_3 = [student.lower() for student in request.form.get("students_3").split(", ")]
             students_4 = [student.lower() for student in request.form.get("students_4").split(", ")]
 
+            # TODO handle more errors and edge cases
             if len(class_id_1) > 1 and len(students_1) > 1:
                 class_and_students[class_id_1] = students_1
             else:
@@ -153,6 +196,15 @@ def gen_file_for_dl():
             yield ", ".join(row) + "\n"
 
     return Response(generate(), mimetype="text/plain", headers={"Content-Disposition": "attachment;filename=test.txt"})
+
+
+def get_absent(roster, students):
+    absent_students = roster.copy()
+    for student in roster:
+        for present_student in students:
+            if student == present_student:
+                absent_students.remove(student)
+    return absent_students
 
 
 def process_files(roster, attendance_file):
