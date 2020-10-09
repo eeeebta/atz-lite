@@ -8,156 +8,170 @@
     </head>
     <body>
         <div class="container">
-            <h1>Find out who's absent</h1>
-            <h3>
-                Create a roster file <a href="/create_roster">here</a>
-            </h3>
-            <br>
-            <form method=post enctype=multipart/form-data>
-                <div class="form-group">
-                    <label class="btn btn-primary" for="roster">
-                        <input id="roster" name="roster" type="file" accept="text/plain" style="display:none"
-                        onchange="$('#roster-info').html(this.files[0].name)">
-                        Upload Roster
-                    </label>
+            {% if message %}
+                {% if students|length > 0 and absent|length > 0 %}
+                    <h3>Here's who is absent:</h3>
+                    <ul>
+                    {% for student in absent %}
+                            <li>{{ student }}</li>
+                    {% endfor %}
+                    </ul>
+                {% elif students|length > 0 %}
+                    <h3>No students are absent</h3>
+                    <!-- Have an else here for students that are present and elif to say just students -->
+                {% endif %}
+            {% else %}
+                <h1>Find out who's absent</h1>
+                <h3>
+                    Create a roster file <a href="/create_roster">here</a>
+                </h3>
+                <br>
+                <form method=post enctype=multipart/form-data>
+                    <div class="form-group">
+                        <label class="btn btn-primary" for="roster">
+                            <input id="roster" name="roster" type="file" accept="text/plain" style="display:none"
+                            onchange="$('#roster-info').html(this.files[0].name)">
+                            Upload Roster
+                        </label>
 
-                    <span class='label label-info' id="roster-info"></span>
-                </div>
-                <div class="form-group">
-                    <label id="attendance_m_btn" class="btn btn-secondary" for="attendance_m">
-                    <input id="attendance_m" name="attendance_m" type="file" accept="text/plain" style="display:none"
-                        onchange="
-                        let newString = '';
-                        let files = document.getElementById('attendance_m').files;
-                        for (let i = 0; i < files.length; i++) {
-                            if (i === 0) {
-                                newString = newString + files[i].name;
-                            } else {
-                                newString = newString + ', ' + files[i].name;
+                        <span class='label label-info' id="roster-info"></span>
+                    </div>
+                    <div class="form-group">
+                        <label id="attendance_m_btn" class="btn btn-secondary" for="attendance_m">
+                        <input id="attendance_m" name="attendance_m" type="file" accept="text/plain" style="display:none"
+                            onchange="
+                            let newString = '';
+                            let files = document.getElementById('attendance_m').files;
+                            for (let i = 0; i < files.length; i++) {
+                                if (i === 0) {
+                                    newString = newString + files[i].name;
+                                } else {
+                                    newString = newString + ', ' + files[i].name;
+                                }
                             }
-                        }
-                        $('#attendance-info').html(newString)" multiple>
-                        Upload (multiple) Zoom Atn Chats
-                    </label>
+                            $('#attendance-info').html(newString)" multiple>
+                            Upload (multiple) Zoom Atn Chats
+                        </label>
 
-                    <span class='label label-info' id="attendance-info"></span>
-                </div>
-                <div id="additional" class="form-group">
-                    <div class="form-row">
-                        <div class="col">
-                            <label id="attendance_1_btn" class="btn btn-secondary" for="attendance_1">
-                                <input id="attendance_1" name="attendance_1" type="file" style="display:none" accept="text/plain" onchange="let files = document.getElementById('attendance_1').files; $('#attendance1-info').html(files[0].name); console.log(files[0].name);">
-                                Upload zoom chat
-                            </label>
-                            <span class='label label-info' id="attendance1-info"></span>
-                        </div>
-                        <div class="col">
-                            <label id="attendance_2_btn" class="btn btn-secondary" for="attendance_2">
-                                <input id="attendance_2" name="attendance_2" type="file" style="display:none" accept="text/plain" onchange="let files = document.getElementById('attendance_2').files; $('#attendance2-info').html(files[0].name); console.log(files[0].name);">
-                                Upload 2nd chat
-                            </label>
-                            <span class='label label-info' id="attendance2-info"></span>
-                        </div>
-                        <div class="col">
-                            <label id="attendance_3_btn" class="btn btn-secondary" for="attendance_3">
-                                <input id="attendance_3" name="attendance_3" type="file" style="display:none" accept="text/plain" onchange="let files = document.getElementById('attendance_3').files; $('#attendance3-info').html(files[0].name); console.log(files[0].name);">
-                                Upload 3rd chat
-                            </label>
-                            <span class='label label-info' id="attendance3-info"></span>
-                        </div>
-                        <div class="col">
-                            <label id="attendance_4_btn" class="btn btn-secondary" for="attendance_4">
-                                <input id="attendance_4" name="attendance_4" type="file" style="display:none" accept="text/plain" onchange="let files = document.getElementById('attendance_1').files; $('#attendance4-info').html(files[0].name); console.log(files[0].name);">
-                                Upload 4th chat
-                            </label>
-                            <span class='label label-info' id="attendance4-info"></span>
+                        <span class='label label-info' id="attendance-info"></span>
+                    </div>
+                    <div id="additional" class="form-group">
+                        <div class="form-row">
+                            <div class="col">
+                                <label id="attendance_1_btn" class="btn btn-secondary" for="attendance_1">
+                                    <input id="attendance_1" name="attendance_1" type="file" style="display:none" accept="text/plain" onchange="let files = document.getElementById('attendance_1').files; $('#attendance1-info').html(files[0].name); console.log(files[0].name);">
+                                    Upload zoom chat
+                                </label>
+                                <span class='label label-info' id="attendance1-info"></span>
+                            </div>
+                            <div class="col">
+                                <label id="attendance_2_btn" class="btn btn-secondary" for="attendance_2">
+                                    <input id="attendance_2" name="attendance_2" type="file" style="display:none" accept="text/plain" onchange="let files = document.getElementById('attendance_2').files; $('#attendance2-info').html(files[0].name); console.log(files[0].name);">
+                                    Upload 2nd chat
+                                </label>
+                                <span class='label label-info' id="attendance2-info"></span>
+                            </div>
+                            <div class="col">
+                                <label id="attendance_3_btn" class="btn btn-secondary" for="attendance_3">
+                                    <input id="attendance_3" name="attendance_3" type="file" style="display:none" accept="text/plain" onchange="let files = document.getElementById('attendance_3').files; $('#attendance3-info').html(files[0].name); console.log(files[0].name);">
+                                    Upload 3rd chat
+                                </label>
+                                <span class='label label-info' id="attendance3-info"></span>
+                            </div>
+                            <div class="col">
+                                <label id="attendance_4_btn" class="btn btn-secondary" for="attendance_4">
+                                    <input id="attendance_4" name="attendance_4" type="file" style="display:none" accept="text/plain" onchange="let files = document.getElementById('attendance_1').files; $('#attendance4-info').html(files[0].name); console.log(files[0].name);">
+                                    Upload 4th chat
+                                </label>
+                                <span class='label label-info' id="attendance4-info"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="sep_uploads" name="sep_uploads" onclick="separateFileUploads(this);">
-                        <label class="form-check-label" for="sep_uploads">Use Separate Uploads</label>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="sep_uploads" name="sep_uploads" onclick="separateFileUploads(this);">
+                            <label class="form-check-label" for="sep_uploads">Use Separate Uploads</label>
+                        </div>
                     </div>
-                </div>
 
-                <button type="submit" class="btn btn-success">do the magical things (upload files)</button>
-            </form>
-        </div>
+                    <button type="submit" class="btn btn-success">do the magical things (upload files)</button>
+                </form>
+            </div>
 
-        <style>
-            .hidden {
-                display: none;
-            }
-        </style>
-
-        <script>
-            function separateFileUploads(checkBox) {
-                if (checkBox.checked) {
-                    document.getElementById("attendance_m").disabled = true;
-                    document.getElementById("attendance_m_btn").disabled = true;
-                    document.getElementById("attendance_m_btn").hidden = true;
-                    document.getElementById("attendance_m").hidden = true;
-                    document.getElementById("attendance_m").value = "";
-
-                    document.getElementById("additional").hidden = false;
-                    document.getElementById("attendance_1_btn").hidden = false;
-                    document.getElementById("attendance_2_btn").hidden = false;
-                    document.getElementById("attendance_3_btn").hidden = false;
-                    document.getElementById("attendance_4_btn").hidden = false;
-
-                    document.getElementById("attendance_1_btn").disabled = false;
-                    document.getElementById("attendance_2_btn").disabled = false;
-                    document.getElementById("attendance_3_btn").disabled = false;
-                    document.getElementById("attendance_4_btn").disabled = false;
-
-
-                    document.getElementById("attendance_1").value = "";
-                    document.getElementById("attendance_2").value = "";
-                    document.getElementById("attendance_3").value = "";
-                    document.getElementById("attendance_4").value = "";
-
-                } else {
-                    document.getElementById("attendance_m").disabled = false;
-                    document.getElementById("attendance_m_btn").disabled = false;
-                    document.getElementById("attendance_m_btn").hidden = false;
-                    document.getElementById("attendance_m").hidden = false;
-                    document.getElementById("attendance_m").value = "";
-
-                    document.getElementById("attendance_1_btn").hidden = true;
-                    document.getElementById("attendance_2_btn").hidden = true;
-                    document.getElementById("attendance_3_btn").hidden = true;
-                    document.getElementById("attendance_4_btn").hidden = true;
-                    document.getElementById("additional").hidden = true;
-
-                    document.getElementById("attendance_1_btn").disabled = true;
-                    document.getElementById("attendance_2_btn").disabled = true;
-                    document.getElementById("attendance_3_btn").disabled = true;
-                    document.getElementById("attendance_4_btn").disabled = true;
-
-                    document.getElementById("attendance_1").value = "";
-                    document.getElementById("attendance_2").value = "";
-                    document.getElementById("attendance_3").value = "";
-                    document.getElementById("attendance_4").value = "";
+            <style>
+                .hidden {
+                    display: none;
                 }
-            }
-            document.getElementById("attendance_1_btn").hidden = true;
-            document.getElementById("attendance_2_btn").hidden = true;
-            document.getElementById("attendance_3_btn").hidden = true;
-            document.getElementById("attendance_4_btn").hidden = true;
-            document.getElementById("additional").hidden = true;
+            </style>
 
-            document.getElementById("attendance_1_btn").disabled = true;
-            document.getElementById("attendance_2_btn").disabled = true;
-            document.getElementById("attendance_3_btn").disabled = true;
-            document.getElementById("attendance_4_btn").disabled = true;
-        </script>
+            <script>
+                function separateFileUploads(checkBox) {
+                    if (checkBox.checked) {
+                        document.getElementById("attendance_m").disabled = true;
+                        document.getElementById("attendance_m_btn").disabled = true;
+                        document.getElementById("attendance_m_btn").hidden = true;
+                        document.getElementById("attendance_m").hidden = true;
+                        document.getElementById("attendance_m").value = "";
+
+                        document.getElementById("additional").hidden = false;
+                        document.getElementById("attendance_1_btn").hidden = false;
+                        document.getElementById("attendance_2_btn").hidden = false;
+                        document.getElementById("attendance_3_btn").hidden = false;
+                        document.getElementById("attendance_4_btn").hidden = false;
+
+                        document.getElementById("attendance_1_btn").disabled = false;
+                        document.getElementById("attendance_2_btn").disabled = false;
+                        document.getElementById("attendance_3_btn").disabled = false;
+                        document.getElementById("attendance_4_btn").disabled = false;
 
 
-        
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+                        document.getElementById("attendance_1").value = "";
+                        document.getElementById("attendance_2").value = "";
+                        document.getElementById("attendance_3").value = "";
+                        document.getElementById("attendance_4").value = "";
+
+                    } else {
+                        document.getElementById("attendance_m").disabled = false;
+                        document.getElementById("attendance_m_btn").disabled = false;
+                        document.getElementById("attendance_m_btn").hidden = false;
+                        document.getElementById("attendance_m").hidden = false;
+                        document.getElementById("attendance_m").value = "";
+
+                        document.getElementById("attendance_1_btn").hidden = true;
+                        document.getElementById("attendance_2_btn").hidden = true;
+                        document.getElementById("attendance_3_btn").hidden = true;
+                        document.getElementById("attendance_4_btn").hidden = true;
+                        document.getElementById("additional").hidden = true;
+
+                        document.getElementById("attendance_1_btn").disabled = true;
+                        document.getElementById("attendance_2_btn").disabled = true;
+                        document.getElementById("attendance_3_btn").disabled = true;
+                        document.getElementById("attendance_4_btn").disabled = true;
+
+                        document.getElementById("attendance_1").value = "";
+                        document.getElementById("attendance_2").value = "";
+                        document.getElementById("attendance_3").value = "";
+                        document.getElementById("attendance_4").value = "";
+                    }
+                }
+                document.getElementById("attendance_1_btn").hidden = true;
+                document.getElementById("attendance_2_btn").hidden = true;
+                document.getElementById("attendance_3_btn").hidden = true;
+                document.getElementById("attendance_4_btn").hidden = true;
+                document.getElementById("additional").hidden = true;
+
+                document.getElementById("attendance_1_btn").disabled = true;
+                document.getElementById("attendance_2_btn").disabled = true;
+                document.getElementById("attendance_3_btn").disabled = true;
+                document.getElementById("attendance_4_btn").disabled = true;
+            </script>
+
+
+
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        {% endif %}
     </body>
 </html>
