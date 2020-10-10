@@ -7,8 +7,21 @@
         <title>Create Roster</title>
     </head>
     <body>
+        <nav class="navbar navbar-expand-lg navbar-light container">
+            <a class="navbar-brand" href="/">Attendinez (Home)</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav mr-auto">
+                </div>
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link nav-hover mr-auto" href="/create_roster">Create Roster</a>
+                </div>
+            </div>
+        </nav>
         <div class="container">
-            <h1>Generate a Roster</h1>
+            <h3>Generate a Roster</h3>
             <br>
             <form method=post enctype=multipart/form-data>
                 <div class="form-row">
@@ -66,7 +79,30 @@
                 <button type="submit" class="btn btn-success">do the magical things pt 2 (generate roster)</button>
             </form>
         </div>
-
+        <footer class="footer">
+            <div class="container">
+                <div class="row" style="font-size: 0.5rem;">
+                    <div class="col-sm f-text">
+                        Made with lots of 💜, chocolate, python, and sleepless nights by <a href="mailto:21ichowdhury@cpsd.us">Ibta C (email me for feature requests or bug squashing)</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <style>
+            .hidden {
+                display: none;
+            }
+            .footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 60px; /* Set the fixed height of the footer here */
+                line-height: 60px; /* Vertically center the text there */
+            }
+            .f-text {
+                font-size: 150% !important;
+            }
+        </style>
         <script>
             function disableClassIds(checkBox) {
                 if (checkBox.checked) {
