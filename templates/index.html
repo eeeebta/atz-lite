@@ -21,6 +21,9 @@
             </div>
         </nav>
         <div class="container">
+            {% if message %}
+                <h4>{{ message }}</h4>
+            {% endif %}
             {% if render_absent_skeleton %}
                 <h4>Here's who is absent:</h4>
                 {% if students|length > 0 and absent|length > 0 and not using_dict %}
@@ -38,7 +41,7 @@
                         {% endfor %}
                         </ul>
                     {% endfor %}
-                {% elif students|length > 0 %}
+                {% else %}
                     <h4>No students are absent</h4>
                     <!-- Have an else here for students that are present and elif to say just students -->
                 {% endif %}
@@ -132,10 +135,6 @@
             </footer>
 
             <style>
-                .hidden {
-                    display: none;
-                }
-
                 .footer {
                     position: absolute;
                     bottom: 0;
