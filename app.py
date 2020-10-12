@@ -6,6 +6,7 @@ from werkzeug.exceptions import HTTPException, default_exceptions, InternalServe
 app = Flask(__name__)
 
 
+# TODO possibly add a "view roster" page to see the students in each class?
 @app.route("/", methods=["GET", "POST"])
 def main():
     if request.method == "POST":
@@ -22,7 +23,7 @@ def main():
             roster = [line.decode() for line in request.files.get("roster").readlines()]
             print(roster)
 
-            # Check that the roster is vali
+            # Check that the roster is valid
             if len(roster) < 1 or roster[0] != "--------ROSTER_HEAD--------\n":
                 return throw_web_error("Roster is not valid", 404)
 
