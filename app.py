@@ -267,7 +267,7 @@ def get_absent(roster, students):
     for student in roster:
         for present_student in students:
             if student == present_student:
-                absent_students.remove(student)
+                absent_students.remove(student.title())
 
     # Finally return this array
     return absent_students
