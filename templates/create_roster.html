@@ -27,7 +27,7 @@
                 <div class="form-row">
                     <div class="col">
                         <label for="class_id_1">Class ID 1/Period 1</label>
-                        <input type="text" class="form-control" placeholder="Class ID" id="class_id_1" name="class_id_1">
+                        <input type="text" class="form-control" placeholder="Class ID" id="class_id_1" name="class_id_1" onchange="checkIfTextInHere(this)">
                     </div>
 
                     <div class="col">
@@ -39,7 +39,7 @@
                 <div class="form-row">
                     <div class="col">
                         <label for="class_id_2">Class ID 2/Period 2</label>
-                        <input type="text" class="form-control" placeholder="Class ID" id="class_id_2" name="class_id_2">
+                        <input type="text" class="form-control" placeholder="Class ID" id="class_id_2" onchange="checkIfTextInHere(this)" name="class_id_2">
                     </div>
                     <div class="col">
                         <label for="students_2">Students in Period 2</label>
@@ -50,7 +50,7 @@
                 <div class="form-row">
                     <div class="col">
                         <label for="class_id_3">Class ID 3/Period 3</label>
-                        <input type="text" class="form-control" placeholder="Class ID" id="class_id_3" name="class_id_3">
+                        <input type="text" class="form-control" placeholder="Class ID" id="class_id_3" onchange="checkIfTextInHere(this)" name="class_id_3">
                     </div>
                     <div class="col">
                         <label for="students_3">Students in Period 3</label>
@@ -61,7 +61,7 @@
                 <div class="form-row">
                     <div class="col">
                         <label for="class_id_2">Class ID 4/Period 4</label>
-                        <input type="text" class="form-control" placeholder="Class ID" id="class_id_4" name="class_id_4">
+                        <input type="text" class="form-control" placeholder="Class ID" id="class_id_4" onchange="checkIfTextInHere(this)" name="class_id_4">
                     </div>
                     <div class="col">
                         <label for="students_4">Students in Period 4</label>
@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-success">do the magical things pt 2 (generate roster)</button>
+                <button type="submit" class="btn btn-success">Generate Roster</button>
             </form>
         </div>
         <footer class="footer">
@@ -89,9 +89,6 @@
             </div>
         </footer>
         <style>
-            .hidden {
-                display: none;
-            }
             .footer {
                 position: absolute;
                 bottom: 0;
@@ -104,6 +101,15 @@
             }
         </style>
         <script>
+            // Set fields to required if typed in
+            function checkIfTextInHere(textField) {
+                let tFId = textField.id;
+
+                // Grab last char
+                let grabNextField = `students_${tFId[tFId.length - 1]}`
+                document.getElementById(grabNextField).required = textField.value.length > 0;
+            }
+
             function disableClassIds(checkBox) {
                 if (checkBox.checked) {
                     document.getElementById("class_id_1").disabled = true;
