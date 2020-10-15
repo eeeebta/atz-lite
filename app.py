@@ -224,7 +224,7 @@ def create_roster():
             # TODO handle more errors and edge cases
             # Make sure that at least one class id exists and that at least one student exists and add the class code
             # and the student array to that dictionary
-            if len(class_id_1) > 1 and len(students_1) > 1:
+            if len(class_id_1) >= 1 and len(students_1) >= 1:
                 class_and_students[class_id_1] = students_1
             else:
                 return throw_web_error("The first Class ID/Period field was left blank. Please select the \"Do Not "

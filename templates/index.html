@@ -36,9 +36,13 @@
                     {% for class_id, student_list in absent.items() %}
                         <h4>{{ class_id|capitalize }}</h4>
                         <ul>
-                        {% for student in student_list %}
-                            <li>{{ student }}</li>
-                        {% endfor %}
+                        {% if student_list|length > 0 %}
+                            {% for student in student_list %}
+                                <li>{{ student }}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li>No absent students</li>
+                        {% endif %}
                         </ul>
                     {% endfor %}
                 {% else %}
@@ -51,7 +55,7 @@
                     Create a roster file <a href="/create_roster">here</a>
                 </h4>
                 <br>
-                <form method=post enctype=multipart/form-data>
+                <form method=post enctype=multipart/form-data id="upForm">
                     <div class="form-group">
                         <label class="btn btn-primary" for="roster">
                             <input id="roster" name="roster" type="file" accept="text/plain" style="display:none"
@@ -120,7 +124,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-success">do the magical things (upload files)</button>
+                    <button type="submit" class="btn btn-success">Check Who's Absent</button>
                 </form>
             </div>
 
@@ -149,6 +153,7 @@
             </style>
 
             <script>
+
                 function separateFileUploads(checkBox) {
                     if (checkBox.checked) {
                         document.getElementById("attendance_m").disabled = true;
@@ -156,6 +161,7 @@
                         document.getElementById("attendance_m_btn").hidden = true;
                         document.getElementById("attendance_m").hidden = true;
                         document.getElementById("attendance_m").value = "";
+                        document.getElementById("attendance-info").innerHTML = "";
 
                         document.getElementById("additional").hidden = false;
                         document.getElementById("attendance_1_btn").hidden = false;
@@ -163,6 +169,8 @@
                         document.getElementById("attendance_3_btn").hidden = false;
                         document.getElementById("attendance_4_btn").hidden = false;
 
+
+                        // TODO disable the attendance uploaders alongside the buttons
                         document.getElementById("attendance_1_btn").disabled = false;
                         document.getElementById("attendance_2_btn").disabled = false;
                         document.getElementById("attendance_3_btn").disabled = false;
@@ -208,6 +216,32 @@
                 document.getElementById("attendance_2_btn").disabled = true;
                 document.getElementById("attendance_3_btn").disabled = true;
                 document.getElementById("attendance_4_btn").disabled = true;
+
+                console.log(document.getElementById("attendance_m").name);
+
+                {#let form = document.getElementById("upForm");#}
+                {#form.addEventListener("submit", function(event) {#}
+                {#    let roster = document.getElementById("roster");#}
+                {#    let attendM = document.getElementById("attendance_m");#}
+                {#    let checkBox = document.getElementById("sep_uploads");#}
+                {#    let attendOne = document.getElementById("attendance_1");#}
+                {##}
+                {##}
+                {#    if ((roster.value === "" || attendM.value === "") && checkBox.value === "off") {#}
+                {#        event.preventDefault();#}
+                {#        alert("Please make sure to upload at least one file in addition to your roster__1");#}
+                {#    } else if ((roster.value === "" || attendOne.value === "") && checkBox.value === "on") {#}
+                {#        event.preventDefault();#}
+                {#        alert("Please make sure to upload at least one file in addition to your roster__2");#}
+                {#    }#}
+                {#    else {#}
+                {#        form.submit();#}
+                {#    }#}
+                {#    //else if ()#}
+                {##}
+                {##}
+                {##}
+//                });
             </script>
 
 
