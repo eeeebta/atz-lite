@@ -126,7 +126,7 @@ def main():
                 found_id = True
                 split_with_code = {}
 
-                # Set classcode arrays in split_with_code
+                # Set class code arrays in split_with_code
                 # TODO rename to something like students in array or whatever
                 for class_code in class_codes:
                     split_with_code[class_code] = []
@@ -259,6 +259,8 @@ def create_roster():
 def get_absent(roster, students):
     # Create a copy of the roster
     absent_students = roster.copy()
+    for student in absent_students:
+        absent_students[absent_students.index(student)] = student.title()
 
     # For each student in the roster and for each present student within the student list: if the student in the roster
     # is equal to the present student then remove it from the absent students, which is a roster copy
